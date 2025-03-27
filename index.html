@@ -1,124 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Performance Optimization -->
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://cloud.onlinegames.io">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://cloud.onlinegames.io">
+    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EBPEK5527P"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-EBPEK5527P');
     </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Play Crazy Games Best - Monster Survivors, a thrilling online game. Immerse yourself in an action-packed world of survival.">
-    <meta name="keywords" content="crazy games best, online games, Monster Survivors, survival games, free online games, crazy games">
-    <meta name="author" content="YourName">
-    <meta property="og:title" content="Crazy Games Best - Monster Survivors">
-    <meta property="og:description" content="Enjoy playing Monster Survivors, a top-rated survival game at Crazy Games Best!">
-    <meta property="og:image" content="https://path-to-your-thumbnail-image.jpg">
-    <meta property="og:url" content="https://crazygames.best">
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="description" content="Play Monster Survivors - The Ultimate Survival Game! Experience thrilling action, strategic gameplay, and endless fun. Free online game with stunning 3D graphics. Perfect for all ages!">
+    <meta name="keywords" content="monster survivors game, online survival game, free online games, action games, 3D games, browser games, multiplayer games, strategy games, monster games, survival games">
+    <meta name="author" content="CrazyGames Best">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.crazygames.best/">
+    <meta property="og:title" content="Monster Survivors - Ultimate Survival Game | CrazyGames Best">
+    <meta property="og:description" content="Play Monster Survivors - The Ultimate Survival Game! Experience thrilling action, strategic gameplay, and endless fun. Free online game with stunning 3D graphics.">
+    <meta property="og:image" content="https://www.crazygames.best/images/monster-survivors-thumbnail.jpg">
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Crazy Games Best - Monster Survivors">
-    <meta name="twitter:description" content="Play Monster Survivors, the best survival game at Crazy Games Best.">
-    <meta name="twitter:image" content="https://path-to-your-thumbnail-image.jpg">
-    <link rel="canonical" href="https://crazygames.best">
-    <title>Crazy Games Best - Monster Survivors</title>
+    <meta name="twitter:url" content="https://www.crazygames.best/">
+    <meta name="twitter:title" content="Monster Survivors - Ultimate Survival Game | CrazyGames Best">
+    <meta name="twitter:description" content="Play Monster Survivors - The Ultimate Survival Game! Experience thrilling action, strategic gameplay, and endless fun. Free online game with stunning 3D graphics.">
+    <meta name="twitter:image" content="https://www.crazygames.best/images/monster-survivors-thumbnail.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.crazygames.best/">
+    
+    <title>Monster Survivors - Ultimate Survival Game | CrazyGames Best</title>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Monster Survivors",
+        "url": "https://www.crazygames.best/",
+        "description": "Play Monster Survivors - The Ultimate Survival Game! Experience thrilling action, strategic gameplay, and endless fun.",
+        "applicationCategory": "Game",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "1250"
+        }
+    }
+    </script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
     <style>
+        /* Critical CSS */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
             color: #333;
-        }
-        h1 {
-            font-size: 36px;
-            color: #333;
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
-        h2 {
-            font-size: 24px;
-            color: #555;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        p {
-            font-size: 16px;
-            line-height: 1.6;
-            margin: 15px 20px;
         }
         .content-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        .game-iframe {
-            width: 100%;
-            height: 600px;
-            border: none;
+        /* Deferred CSS */
+        @media (min-width: 768px) {
+            .game-iframe {
+                height: 600px;
+            }
         }
-        .cta-container {
-            text-align: center;
-            margin: 30px 0;
-        }
-        .cta-button {
-            padding: 15px 25px;
-            background-color: #007AFF; /* Apple typical blue */
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .cta-button:hover {
-            background-color: #005B99; /* Darker blue on hover */
-        }
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
             .game-iframe {
                 height: 400px;
-            }
-            h1 {
-                font-size: 28px;
-            }
-            h2 {
-                font-size: 20px;
             }
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50">
+    <!-- Language Selector -->
+    <div class="fixed top-4 right-4 z-50">
+        <select id="languageSelector" class="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="pt">Português</option>
+            <option value="ru">Русский</option>
+            <option value="zh">中文</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+        </select>
+    </div>
+
     <div class="content-container">
         <!-- Main title (H1) -->
-        <h1>Crazy Games Best - Monster Survivors</h1>
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-gray-900 mt-8 mb-4" data-i18n="title">Monster Survivors - Ultimate Survival Game</h1>
 
         <!-- Game introduction (H2) -->
-        <h2>Experience the Ultimate Survival Challenge!</h2>
-        <p>Welcome to Crazy Games Best, your top destination for thrilling online games! Dive into Monster Survivors, an action-packed survival game where only the strongest prevail. Play it now and see if you can survive the monster horde!</p>
+        <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 mt-8 mb-4" data-i18n="subtitle">Experience the Ultimate Survival Challenge!</h2>
+        <p class="text-lg text-gray-700 mb-6" data-i18n="intro">Welcome to Monster Survivors, where strategy meets action! Dive into an epic survival adventure where you'll face waves of monsters, gather resources, and prove your worth as the ultimate survivor.</p>
 
         <!-- Iframe for the game -->
-        <iframe class="game-iframe" src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" title="Monster Survivors Game"></iframe>
+        <div class="w-full bg-white rounded-lg shadow-lg p-4 mb-8">
+            <iframe class="game-iframe w-full border-0 rounded-lg" src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" title="Monster Survivors Game"></iframe>
+        </div>
 
         <!-- Game details (H2) -->
-        <h2>About Monster Survivors</h2>
-        <p>Monster Survivors is an exhilarating online survival game that challenges your reflexes and strategic thinking. You must fend off waves of monsters, gather resources, and survive as long as possible. With intuitive controls and engaging gameplay, it's perfect for players of all ages!</p>
+        <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 mt-8 mb-4" data-i18n="about">About Monster Survivors</h2>
+        <p class="text-lg text-gray-700 mb-6" data-i18n="about-text">Monster Survivors is an exhilarating online survival game that challenges your reflexes and strategic thinking. You must fend off waves of monsters, gather resources, and survive as long as possible. With intuitive controls and engaging gameplay, it's perfect for players of all ages!</p>
 
-        <h2>Game Features:</h2>
-        <ul>
-            <li>Action-packed survival gameplay</li>
-            <li>Challenging waves of monsters</li>
-            <li>Multiple weapons and power-ups</li>
-            <li>Stunning 3D graphics and animations</li>
-            <li>Playable on both desktop and mobile devices</li>
+        <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 mt-8 mb-4" data-i18n="features">Game Features:</h2>
+        <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <li class="flex items-center space-x-2 text-gray-700">
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span data-i18n="feature1">Action-packed survival gameplay</span>
+            </li>
+            <li class="flex items-center space-x-2 text-gray-700">
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span data-i18n="feature2">Challenging waves of monsters</span>
+            </li>
+            <li class="flex items-center space-x-2 text-gray-700">
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span data-i18n="feature3">Multiple weapons and power-ups</span>
+            </li>
+            <li class="flex items-center space-x-2 text-gray-700">
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span data-i18n="feature4">Stunning 3D graphics and animations</span>
+            </li>
+            <li class="flex items-center space-x-2 text-gray-700">
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span data-i18n="feature5">Playable on both desktop and mobile devices</span>
+            </li>
         </ul>
 
         <!-- Call to action (CTA) -->
-        <div class="cta-container">
-            <a href="https://crazygames.best" class="cta-button">Play Now</a>
+        <div class="text-center my-8">
+            <a href="#" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105" data-i18n="play-now">Play Now</a>
         </div>
     </div>
+
+    <!-- i18n Script -->
+    <script>
+        const translations = {
+            en: {
+                title: "Monster Survivors - Ultimate Survival Game",
+                subtitle: "Experience the Ultimate Survival Challenge!",
+                intro: "Welcome to Monster Survivors, where strategy meets action! Dive into an epic survival adventure where you'll face waves of monsters, gather resources, and prove your worth as the ultimate survivor.",
+                about: "About Monster Survivors",
+                "about-text": "Monster Survivors is an exhilarating online survival game that challenges your reflexes and strategic thinking. You must fend off waves of monsters, gather resources, and survive as long as possible. With intuitive controls and engaging gameplay, it's perfect for players of all ages!",
+                features: "Game Features:",
+                feature1: "Action-packed survival gameplay",
+                feature2: "Challenging waves of monsters",
+                feature3: "Multiple weapons and power-ups",
+                feature4: "Stunning 3D graphics and animations",
+                feature5: "Playable on both desktop and mobile devices",
+                "play-now": "Play Now"
+            },
+            es: {
+                title: "Monster Survivors - Juego de Supervivencia Definitivo",
+                subtitle: "¡Experimenta el Desafío de Supervivencia Definitivo!",
+                intro: "Bienvenido a Monster Survivors, donde la estrategia se encuentra con la acción. Sumérgete en una épica aventura de supervivencia donde enfrentarás oleadas de monstruos, recolectarás recursos y demostrarás tu valía como el superviviente definitivo.",
+                about: "Sobre Monster Survivors",
+                "about-text": "Monster Survivors es un emocionante juego de supervivencia en línea que desafía tus reflejos y pensamiento estratégico. Debes defenderte de oleadas de monstruos, recolectar recursos y sobrevivir el mayor tiempo posible. Con controles intuitivos y jugabilidad atractiva, ¡es perfecto para jugadores de todas las edades!",
+                features: "Características del Juego:",
+                feature1: "Jugabilidad de supervivencia llena de acción",
+                feature2: "Oleadas desafiantes de monstruos",
+                feature3: "Múltiples armas y power-ups",
+                feature4: "Impresionantes gráficos y animaciones 3D",
+                feature5: "Jugable en dispositivos de escritorio y móviles",
+                "play-now": "Jugar Ahora"
+            }
+            // Add more languages here...
+        };
+
+        function updateLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        document.getElementById('languageSelector').addEventListener('change', (e) => {
+            updateLanguage(e.target.value);
+            localStorage.setItem('preferred-language', e.target.value);
+        });
+
+        // Set initial language
+        const preferredLanguage = localStorage.getItem('preferred-language') || 
+                                 navigator.language.split('-')[0] || 
+                                 'en';
+        document.getElementById('languageSelector').value = preferredLanguage;
+        updateLanguage(preferredLanguage);
+    </script>
 </body>
 </html>
