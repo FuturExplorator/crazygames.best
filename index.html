@@ -133,10 +133,13 @@
             border-radius: 0.5rem;
             max-width: 300px;
             z-index: 10;
-            pointer-events: none; /* 添加这行，使弹窗不会拦截鼠标事件 */
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         .controls-info.show {
             display: block;
+            opacity: 1;
         }
         /* Deferred CSS */
         @media (min-width: 768px) {
@@ -1487,6 +1490,48 @@
 
         // 初始化控制说明功能
         initializeControlsInfo();
+
+        // 游戏控制说明显示逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameContainer = document.querySelector('.game-container');
+            const controlsInfo = document.querySelector('.controls-info');
+            let gameStarted = false;
+            let adFinished = false;
+
+            // 监听iframe加载完成事件
+            const gameIframe = document.querySelector('.game-iframe');
+            if (gameIframe) {
+                gameIframe.addEventListener('load', () => {
+                    // 给广告一些时间完成
+                    setTimeout(() => {
+                        adFinished = true;
+                    }, 15000); // 15秒后认为广告已经结束
+                });
+            }
+
+            // 更新鼠标移动事件处理
+            if (gameContainer && controlsInfo) {
+                gameContainer.addEventListener('mousemove', (e) => {
+                    if (!adFinished) return; // 如果广告还没结束，不显示控制说明
+
+                    const rect = gameContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    // 只在鼠标移动到右下角时显示
+                    if (x > rect.width * 0.7 && y > rect.height * 0.7) {
+                        controlsInfo.classList.add('show');
+                    } else {
+                        controlsInfo.classList.remove('show');
+                    }
+                });
+
+                // 当鼠标离开游戏容器时隐藏控制说明
+                gameContainer.addEventListener('mouseleave', () => {
+                    controlsInfo.classList.remove('show');
+                });
+            }
+        });
     </script>
 </body>
 </html>
