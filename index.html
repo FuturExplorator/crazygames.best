@@ -187,12 +187,58 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             max-width: 300px;
             z-index: 50;
+            transition: all 0.3s ease;
+        }
+        .leaderboard:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
             padding: 0.5rem 0;
             border-bottom: 1px solid #eee;
+            transition: background-color 0.2s ease;
+        }
+        .leaderboard-item:hover {
+            background-color: #f8f8f8;
+        }
+        
+        /* Game Over Modal */
+        .game-over-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .modal-content button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .modal-content button:hover {
+            background: #45a049;
         }
         
         /* Share Buttons */
@@ -350,65 +396,6 @@
             text-shadow: 1px 1px 2px rgba(205, 127, 50, 0.5);
         }
 
-        /* 游戏结束动画 */
-        .game-over-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .game-over-content {
-            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-            padding: 2rem;
-            border-radius: 1rem;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            animation: modalPop 0.5s ease-out;
-        }
-
-        @keyframes modalPop {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .score-comparison {
-            margin: 1rem 0;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
-        }
-
-        .next-rank {
-            color: #ffd700;
-            font-weight: bold;
-            margin: 0.5rem 0;
-        }
-
-        .achievement-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            margin: 0.5rem;
-            background: linear-gradient(45deg, #ffd700, #ffa500);
-            border-radius: 2rem;
-            color: #000;
-            font-weight: bold;
-            animation: badgePop 0.5s ease-out;
-        }
-
-        @keyframes badgePop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
         /* 左侧操作说明样式 */
         .game-controls {
             position: fixed;
@@ -464,6 +451,11 @@
     
     <!-- Add Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 </head>
 <body class="bg-gray-50">
     <!-- Language Selector -->
@@ -495,11 +487,17 @@
 
         <!-- Iframe for the game -->
         <div class="game-container mb-8">
+            <!-- 游戏iframe -->
+            <iframe class="game-iframe w-full" src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" title="Monster Survivors Game"></iframe>
+            
+            <!-- 加载动画 -->
             <div class="loading-spinner"></div>
+            
+            <!-- 错误消息 -->
             <div class="error-message" data-i18n="error-message">
                 Failed to load game. Please try refreshing the page or check your internet connection.
             </div>
-            <iframe class="game-iframe w-full border-0" src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" title="Monster Survivors Game"></iframe>
+            
             <div class="controls-info" data-i18n="controls">
                 <h3 class="font-bold mb-2">Game Controls:</h3>
                 <ul class="text-sm">
@@ -592,7 +590,7 @@
 
     <!-- Leaderboard -->
     <div class="leaderboard">
-        <h3 class="font-bold mb-2" data-i18n="leaderboard-title">Top Players</h3>
+        <h3 class="text-xl font-bold mb-4" data-i18n="leaderboard-title">Top Players</h3>
         <div id="leaderboardList">
             <!-- Leaderboard items will be populated by JavaScript -->
         </div>
@@ -1532,6 +1530,120 @@
                 });
             }
         });
+
+        // Firebase 配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyBCYF-UxTKHDUGBnUYsCQS0HrJXcHgUoIc",
+            authDomain: "monster-survivors-game.firebaseapp.com",
+            databaseURL: "https://monster-survivors-game-default-rtdb.firebaseio.com",
+            projectId: "monster-survivors-game",
+            storageBucket: "monster-survivors-game.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abc123def456"
+        };
+
+        // 初始化 Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // 游戏状态变量
+        let gameStartTime = null;
+        let currentScore = 0;
+        let isGameActive = false;
+        let playerName = null;
+        let scoreUpdateInterval = null;
+
+        // 更新排行榜显示
+        function updateLeaderboardDisplay(data) {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            if (!data) return;
+
+            const scores = Object.entries(data)
+                .map(([id, score]) => ({
+                    id,
+                    name: score.name,
+                    score: score.score,
+                    timestamp: score.timestamp
+                }))
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 10);
+
+            leaderboardList.innerHTML = scores.map((score, index) => `
+                <div class="leaderboard-item ${index < 3 ? 'top-' + (index + 1) : ''}">
+                    <span class="rank">${index + 1}</span>
+                    <span class="name">${score.name}</span>
+                    <span class="score">${score.score}</span>
+                </div>
+            `).join('');
+        }
+
+        // 初始化排行榜
+        function initializeLeaderboard() {
+            const leaderboardRef = firebase.database().ref('leaderboard');
+            leaderboardRef.on('value', (snapshot) => {
+                updateLeaderboardDisplay(snapshot.val());
+            });
+        }
+
+        // 开始新游戏
+        function startNewGame() {
+            if (!playerName) {
+                playerName = prompt('请输入你的名字：');
+                if (!playerName) {
+                    playerName = '匿名玩家';
+                }
+            }
+            
+            gameStartTime = Date.now();
+            currentScore = 0;
+            isGameActive = true;
+            
+            // 开始定时更新分数
+            if (scoreUpdateInterval) {
+                clearInterval(scoreUpdateInterval);
+            }
+            scoreUpdateInterval = setInterval(() => {
+                if (isGameActive) {
+                    currentScore = Math.floor((Date.now() - gameStartTime) / 1000);
+                }
+            }, 1000);
+        }
+
+        // 结束游戏
+        function endGame() {
+            if (!isGameActive) return;
+            
+            isGameActive = false;
+            if (scoreUpdateInterval) {
+                clearInterval(scoreUpdateInterval);
+            }
+            
+            // 保存分数到排行榜
+            const leaderboardRef = firebase.database().ref('leaderboard');
+            leaderboardRef.push({
+                name: playerName,
+                score: currentScore,
+                timestamp: Date.now()
+            });
+            
+            // 显示游戏结束模态框
+            const modal = document.getElementById('game-over-modal');
+            const finalScore = document.getElementById('final-score');
+            finalScore.textContent = currentScore;
+            modal.style.display = 'flex';
+        }
+
+        // 监听游戏iframe的消息
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'gameStart') {
+                startNewGame();
+            } else if (event.data.type === 'gameOver') {
+                endGame();
+            }
+        });
+
+        // 初始化排行榜
+        initializeLeaderboard();
     </script>
 </body>
 </html>
