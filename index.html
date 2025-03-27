@@ -133,6 +133,7 @@
             border-radius: 0.5rem;
             max-width: 300px;
             z-index: 10;
+            pointer-events: none; /* 添加这行，使弹窗不会拦截鼠标事件 */
         }
         .controls-info.show {
             display: block;
@@ -1446,6 +1447,46 @@
             showGameOver(score);
             updateLeaderboard();
         }
+
+        // 修改游戏控制说明的显示逻辑
+        function initializeControlsInfo() {
+            const gameContainer = document.querySelector('.game-container');
+            const controlsInfo = document.querySelector('.controls-info');
+            
+            // 添加一个标志来追踪游戏是否已经开始
+            let gameStarted = false;
+            
+            // 监听iframe加载完成事件
+            gameIframe.addEventListener('load', () => {
+                // 给游戏一些时间来初始化
+                setTimeout(() => {
+                    gameStarted = true;
+                }, 10000); // 10秒后认为游戏已经开始（广告应该已经结束）
+            });
+
+            // 更新鼠标移动事件处理
+            gameContainer.addEventListener('mousemove', (e) => {
+                if (!gameStarted) return; // 如果游戏还没开始，不显示控制说明
+                
+                const rect = gameContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // 只在右下角区域显示控制说明
+                if (x > rect.width * 0.7 && y > rect.height * 0.7) {
+                    controlsInfo.style.display = 'block';
+                } else {
+                    controlsInfo.style.display = 'none';
+                }
+            });
+
+            gameContainer.addEventListener('mouseleave', () => {
+                controlsInfo.style.display = 'none';
+            });
+        }
+
+        // 初始化控制说明功能
+        initializeControlsInfo();
     </script>
 </body>
 </html>
