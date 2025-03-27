@@ -86,6 +86,57 @@
             margin: 0 auto;
             padding: 20px;
         }
+        .game-container {
+            position: relative;
+            width: 100%;
+            background: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .error-message {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        .controls-info {
+            display: none;
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            max-width: 300px;
+            z-index: 10;
+        }
+        .controls-info.show {
+            display: block;
+        }
         /* Deferred CSS */
         @media (min-width: 768px) {
             .game-iframe {
@@ -97,11 +148,322 @@
                 height: 400px;
             }
         }
+        
+        /* Tutorial Modal */
+        .tutorial-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .tutorial-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        /* Leaderboard */
+        .leaderboard {
+            position: fixed;
+            right: 1rem;
+            top: 5rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 300px;
+            z-index: 50;
+        }
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Share Buttons */
+        .share-buttons {
+            position: fixed;
+            left: 1rem;
+            top: 5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 50;
+        }
+        .share-button {
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .share-button:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .leaderboard {
+                position: static;
+                max-width: 100%;
+                margin: 1rem 0;
+            }
+            .share-buttons {
+                position: static;
+                flex-direction: row;
+                justify-content: center;
+                margin: 1rem 0;
+            }
+        }
+
+        /* Mobile Controls */
+        .mobile-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mobile-btn:active {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0.95);
+        }
+
+        /* Save Progress Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        /* 排行榜前三名特效 */
+        .top-player {
+            position: relative;
+            font-size: 1.2em;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .top-player.rank-1 {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            font-size: 1.4em;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: shine 2s infinite;
+        }
+
+        .top-player.rank-2 {
+            background: linear-gradient(45deg, #E8E8E8, #A0A0A0);
+            color: #000;
+            font-size: 1.3em;
+            box-shadow: 0 0 8px rgba(192, 192, 192, 0.5);
+            animation: shine 2.5s infinite;
+        }
+
+        .top-player.rank-3 {
+            background: linear-gradient(45deg, #CD7F32, #B87333);
+            color: #fff;
+            font-size: 1.2em;
+            box-shadow: 0 0 6px rgba(205, 127, 50, 0.5);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { filter: brightness(100%); }
+            50% { filter: brightness(120%); }
+            100% { filter: brightness(100%); }
+        }
+
+        /* 排行榜项目样式 */
+        .leaderboard-item {
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .leaderboard-item:hover {
+            transform: scale(1.02);
+        }
+
+        /* 分数样式 */
+        .score-gold {
+            color: #000;
+            font-weight: 900;
+            font-size: 1.3em;
+            text-shadow: 1px 1px 2px rgba(255, 215, 0, 0.5);
+        }
+
+        .score-silver {
+            color: #000;
+            font-weight: 800;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(192, 192, 192, 0.5);
+        }
+
+        .score-bronze {
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(205, 127, 50, 0.5);
+        }
+
+        /* 游戏结束动画 */
+        .game-over-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-over-content {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: modalPop 0.5s ease-out;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .score-comparison {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+        }
+
+        .next-rank {
+            color: #ffd700;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem;
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            border-radius: 2rem;
+            color: #000;
+            font-weight: bold;
+            animation: badgePop 0.5s ease-out;
+        }
+
+        @keyframes badgePop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* 左侧操作说明样式 */
+        .game-controls {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
+            max-width: 250px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-controls h3 {
+            color: #FFD700;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-item {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key {
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .tip {
+            color: #FFD700;
+            font-style: italic;
+            font-size: 0.9em;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
     </style>
+    
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gray-50">
     <!-- Language Selector -->
-    <div class="fixed top-4 right-4 z-50">
+    <div class="fixed top-4 right-4 z-50 bg-white rounded-lg shadow-lg p-2">
         <select id="languageSelector" class="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="en">English</option>
             <option value="es">Español</option>
@@ -113,6 +475,9 @@
             <option value="zh">中文</option>
             <option value="ja">日本語</option>
             <option value="ko">한국어</option>
+            <option value="nl">Nederlands</option>
+            <option value="ar">العربية</option>
+            <option value="hi">हिंदी</option>
         </select>
     </div>
 
@@ -125,8 +490,21 @@
         <p class="text-lg text-gray-700 mb-6" data-i18n="intro">Welcome to Monster Survivors, where strategy meets action! Dive into an epic survival adventure where you'll face waves of monsters, gather resources, and prove your worth as the ultimate survivor.</p>
 
         <!-- Iframe for the game -->
-        <div class="w-full bg-white rounded-lg shadow-lg p-4 mb-8">
-            <iframe class="game-iframe w-full border-0 rounded-lg" src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" title="Monster Survivors Game"></iframe>
+        <div class="game-container mb-8">
+            <div class="loading-spinner"></div>
+            <div class="error-message" data-i18n="error-message">
+                Failed to load game. Please try refreshing the page or check your internet connection.
+            </div>
+            <iframe class="game-iframe w-full border-0" src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" title="Monster Survivors Game"></iframe>
+            <div class="controls-info" data-i18n="controls">
+                <h3 class="font-bold mb-2">Game Controls:</h3>
+                <ul class="text-sm">
+                    <li>WASD / Arrow Keys: Move</li>
+                    <li>Mouse: Aim & Shoot</li>
+                    <li>Space: Special Ability</li>
+                    <li>E: Interact</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Game details (H2) -->
@@ -173,6 +551,115 @@
         </div>
     </div>
 
+    <!-- Add Tutorial Button -->
+    <button id="tutorialBtn" class="fixed top-4 left-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-colors">
+        <i class="fas fa-question-circle mr-2"></i>
+        Tutorial
+    </button>
+
+    <!-- Tutorial Modal -->
+    <div id="tutorialModal" class="tutorial-modal">
+        <div class="tutorial-content">
+            <h2 class="text-2xl font-bold mb-4" data-i18n="tutorial-title">How to Play Monster Survivors</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="font-semibold mb-2" data-i18n="tutorial-basic">Basic Controls</h3>
+                    <p data-i18n="tutorial-basic-text">Use WASD or arrow keys to move your character. Mouse to aim and shoot. Space for special abilities, and E to interact with objects.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2" data-i18n="tutorial-objective">Game Objective</h3>
+                    <p data-i18n="tutorial-objective-text">Survive waves of monsters while collecting resources and power-ups. The longer you survive, the more points you earn!</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2" data-i18n="tutorial-tips">Pro Tips</h3>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li data-i18n="tutorial-tip1">Always keep moving to avoid monster attacks</li>
+                        <li data-i18n="tutorial-tip2">Collect power-ups whenever possible</li>
+                        <li data-i18n="tutorial-tip3">Use special abilities strategically</li>
+                        <li data-i18n="tutorial-tip4">Watch out for boss monsters</li>
+                    </ul>
+                </div>
+            </div>
+            <button id="closeTutorial" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Got it!
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard">
+        <h3 class="font-bold mb-2" data-i18n="leaderboard-title">Top Players</h3>
+        <div id="leaderboardList">
+            <!-- Leaderboard items will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Share Buttons -->
+    <div class="share-buttons">
+        <button class="share-button" onclick="shareOnFacebook()">
+            <i class="fab fa-facebook-f text-blue-600"></i>
+        </button>
+        <button class="share-button" onclick="shareOnTwitter()">
+            <i class="fab fa-twitter text-blue-400"></i>
+        </button>
+        <button class="share-button" onclick="shareOnWhatsApp()">
+            <i class="fab fa-whatsapp text-green-500"></i>
+        </button>
+    </div>
+
+    <!-- Add Save Progress Button -->
+    <button id="saveProgressBtn" class="fixed bottom-4 right-4 z-50 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-green-700 transition-colors">
+        <i class="fas fa-save mr-2"></i>
+        Save Progress
+    </button>
+
+    <!-- Mobile Controls Overlay -->
+    <div id="mobileControls" class="fixed bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4 hidden md:hidden">
+        <div class="flex justify-between items-center">
+            <div class="flex space-x-4">
+                <button class="mobile-btn" data-action="left">
+                    <i class="fas fa-arrow-left text-white text-2xl"></i>
+                </button>
+                <button class="mobile-btn" data-action="right">
+                    <i class="fas fa-arrow-right text-white text-2xl"></i>
+                </button>
+            </div>
+            <button class="mobile-btn" data-action="shoot">
+                <i class="fas fa-crosshairs text-white text-2xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 添加左侧操作说明 -->
+    <div class="game-controls" data-i18n-container>
+        <h3 data-i18n="controls-title">游戏操作说明</h3>
+        <div class="control-item">
+            <span class="key">W</span>
+            <span data-i18n="control-up">向上移动</span>
+        </div>
+        <div class="control-item">
+            <span class="key">A</span>
+            <span data-i18n="control-left">向左移动</span>
+        </div>
+        <div class="control-item">
+            <span class="key">S</span>
+            <span data-i18n="control-down">向下移动</span>
+        </div>
+        <div class="control-item">
+            <span class="key">D</span>
+            <span data-i18n="control-right">向右移动</span>
+        </div>
+        <div class="control-item">
+            <span class="key">空格</span>
+            <span data-i18n="control-shoot">射击</span>
+        </div>
+        <div class="control-item">
+            <span class="key">E</span>
+            <span data-i18n="control-special">特殊能力</span>
+        </div>
+        <div class="tip" data-i18n="game-tip">提示：收集能量道具可以提升特殊能力效果！</div>
+    </div>
+
     <!-- i18n Script -->
     <script>
         const translations = {
@@ -188,7 +675,31 @@
                 feature3: "Multiple weapons and power-ups",
                 feature4: "Stunning 3D graphics and animations",
                 feature5: "Playable on both desktop and mobile devices",
-                "play-now": "Play Now"
+                "play-now": "Play Now",
+                "error-message": "Failed to load game. Please try refreshing the page or check your internet connection.",
+                "controls": "Game Controls:\nWASD / Arrow Keys: Move\nMouse: Aim & Shoot\nSpace: Special Ability\nE: Interact",
+                "tutorial-title": "How to Play Monster Survivors",
+                "tutorial-basic": "Basic Controls",
+                "tutorial-basic-text": "Use WASD or arrow keys to move your character. Mouse to aim and shoot. Space for special abilities, and E to interact with objects.",
+                "tutorial-objective": "Game Objective",
+                "tutorial-objective-text": "Survive waves of monsters while collecting resources and power-ups. The longer you survive, the more points you earn!",
+                "tutorial-tips": "Pro Tips",
+                "tutorial-tip1": "Always keep moving to avoid monster attacks",
+                "tutorial-tip2": "Collect power-ups whenever possible",
+                "tutorial-tip3": "Use special abilities strategically",
+                "tutorial-tip4": "Watch out for boss monsters",
+                "leaderboard-title": "Top Players",
+                "save-progress": "Save Progress",
+                "progress-saved": "Progress saved successfully!",
+                "mobile-controls": "Mobile Controls",
+                "controls-title": "Game Controls",
+                "control-up": "Move Up",
+                "control-left": "Move Left",
+                "control-down": "Move Down",
+                "control-right": "Move Right",
+                "control-shoot": "Shoot",
+                "control-special": "Special Ability",
+                "game-tip": "Tip: Collect power-ups to enhance your special ability!"
             },
             es: {
                 title: "Monster Survivors - Juego de Supervivencia Definitivo",
@@ -202,31 +713,739 @@
                 feature3: "Múltiples armas y power-ups",
                 feature4: "Impresionantes gráficos y animaciones 3D",
                 feature5: "Jugable en dispositivos de escritorio y móviles",
-                "play-now": "Jugar Ahora"
+                "play-now": "Jugar Ahora",
+                "error-message": "Error al cargar el juego. Por favor, intenta actualizar la página o verifica tu conexión a internet.",
+                "controls": "Controles del Juego:\nWASD / Teclas de flecha: Moverse\nRatón: Apuntar y disparar\nEspacio: Habilidad especial\nE: Interactuar",
+                "tutorial-title": "Cómo Jugar Monster Survivors",
+                "tutorial-basic": "Controles Básicos",
+                "tutorial-basic-text": "Usa WASD o las flechas para mover tu personaje. Ratón para apuntar y disparar. Espacio para habilidades especiales, y E para interactuar.",
+                "tutorial-objective": "Objetivo del Juego",
+                "tutorial-objective-text": "Sobrevive oleadas de monstruos mientras recolectas recursos y power-ups. ¡Cuanto más tiempo sobrevivas, más puntos ganarás!",
+                "tutorial-tips": "Consejos Pro",
+                "tutorial-tip1": "Siempre mantente en movimiento para evitar ataques",
+                "tutorial-tip2": "Recolecta power-ups cuando sea posible",
+                "tutorial-tip3": "Usa habilidades especiales estratégicamente",
+                "tutorial-tip4": "Cuidado con los monstruos jefe",
+                "leaderboard-title": "Mejores Jugadores",
+                "save-progress": "Guardar Progreso",
+                "progress-saved": "¡Progreso guardado exitosamente!",
+                "mobile-controls": "Controles Móviles",
+                "controls-title": "Controles del Juego",
+                "control-up": "Moverse",
+                "control-left": "Moverse a la izquierda",
+                "control-down": "Moverse hacia abajo",
+                "control-right": "Moverse a la derecha",
+                "control-shoot": "Disparar",
+                "control-special": "Habilidad Especial",
+                "game-tip": "Consejo: Recolecta power-ups para mejorar tu habilidad especial!"
+            },
+            zh: {
+                title: "怪物幸存者 - 终极生存游戏",
+                subtitle: "体验终极生存挑战！",
+                intro: "欢迎来到怪物幸存者，在这里策略与动作完美结合！投身于一场史诗般的生存冒险，面对一波波怪物，收集资源，证明你是终极幸存者。",
+                about: "关于怪物幸存者",
+                "about-text": "怪物幸存者是一款令人兴奋的在线生存游戏，挑战你的反应能力和战略思维。你必须抵御一波波怪物，收集资源，尽可能长时间地生存。凭借直观的控制和引人入胜的游戏玩法，适合所有年龄段的玩家！",
+                features: "游戏特色：",
+                feature1: "充满动作的生存游戏玩法",
+                feature2: "具有挑战性的怪物浪潮",
+                feature3: "多种武器和能量提升",
+                feature4: "令人惊叹的3D图形和动画",
+                feature5: "支持桌面和移动设备",
+                "play-now": "立即开玩",
+                "error-message": "游戏加载失败。请刷新页面或检查网络连接。",
+                "controls": "游戏控制：\nWASD / 方向键：移动\n鼠标：瞄准和射击\n空格：特殊能力\nE：互动",
+                "tutorial-title": "如何玩怪物幸存者",
+                "tutorial-basic": "基本控制",
+                "tutorial-basic-text": "使用WASD或方向键移动角色。鼠标瞄准和射击。空格键使用特殊能力，E键与物体互动。",
+                "tutorial-objective": "游戏目标",
+                "tutorial-objective-text": "在收集资源和能量提升的同时，抵御一波波怪物。生存时间越长，获得的分数越多！",
+                "tutorial-tips": "专业技巧",
+                "tutorial-tip1": "始终保持移动以躲避怪物攻击",
+                "tutorial-tip2": "尽可能收集能量提升",
+                "tutorial-tip3": "战略性地使用特殊能力",
+                "tutorial-tip4": "注意Boss怪物",
+                "leaderboard-title": "顶级玩家",
+                "save-progress": "保存进度",
+                "progress-saved": "进度保存成功！",
+                "mobile-controls": "移动端控制",
+                "controls-title": "游戏操作说明",
+                "control-up": "向上移动",
+                "control-left": "向左移动",
+                "control-down": "向下移动",
+                "control-right": "向右移动",
+                "control-shoot": "射击",
+                "control-special": "特殊能力",
+                "game-tip": "提示：收集能量道具可以提升特殊能力效果！"
+            },
+            nl: {
+                title: "Monster Survivors - Ultiem Overlevingsspel",
+                subtitle: "Ervaar de Ultieme Overlevingsuitdaging!",
+                intro: "Welkom bij Monster Survivors, waar strategie en actie samenkomen! Duik in een episch overlevingsavontuur waar je golven van monsters zult trotseren, hulpbronnen verzamelen en jezelf bewijzen als de ultieme overlevende.",
+                about: "Over Monster Survivors",
+                "about-text": "Monster Survivors is een opwindend online overlevingsspel dat je reflexen en strategisch denken op de proef stelt. Je moet golven van monsters afweren, hulpbronnen verzamelen en zo lang mogelijk overleven. Met intuïtieve besturing en boeiende gameplay is het perfect voor spelers van alle leeftijden!",
+                features: "Spelkenmerken:",
+                feature1: "Actievolle overlevingsgameplay",
+                feature2: "Uitdagende monstergolven",
+                feature3: "Meerdere wapens en power-ups",
+                feature4: "Prachtige 3D-graphics en animaties",
+                feature5: "Speelbaar op desktop en mobiele apparaten",
+                "play-now": "Nu Spelen",
+                "error-message": "Spel laden mislukt. Vernieuw de pagina of controleer je internetverbinding.",
+                "controls": "Spelbesturing:\nWASD / Pijltjestoetsen: Bewegen\nMuis: Richten en Schieten\nSpatie: Speciale Vaardigheid\nE: Interacteren",
+                "tutorial-title": "Hoe te Spelen Monster Survivors",
+                "tutorial-basic": "Basisbesturing",
+                "tutorial-basic-text": "Gebruik WASD of pijltjestoetsen om je personage te bewegen. Muis om te richten en schieten. Spatie voor speciale vaardigheden, en E om te interacteren.",
+                "tutorial-objective": "Speldoel",
+                "tutorial-objective-text": "Overleef golven van monsters terwijl je hulpbronnen en power-ups verzamelt. Hoe langer je overleeft, hoe meer punten je verdient!",
+                "tutorial-tips": "Pro Tips",
+                "tutorial-tip1": "Blijf altijd in beweging om monsteraanvallen te ontwijken",
+                "tutorial-tip2": "Verzamel power-ups wanneer mogelijk",
+                "tutorial-tip3": "Gebruik speciale vaardigheden strategisch",
+                "tutorial-tip4": "Pas op voor baasmonsters",
+                "leaderboard-title": "Top Spelers",
+                "save-progress": "Voortgang Opslaan",
+                "progress-saved": "Voortgang succesvol opgeslagen!",
+                "mobile-controls": "Mobiele Besturing",
+                "controls-title": "Spelbesturing",
+                "control-up": "Bewegen",
+                "control-left": "Links bewegen",
+                "control-down": "Omlaag bewegen",
+                "control-right": "Rechts bewegen",
+                "control-shoot": "Schieten",
+                "control-special": "Speciale Vaardigheid",
+                "game-tip": "Tip: Verzamel power-ups om je speciale vaardigheid te verbeteren!"
+            },
+            de: {
+                title: "Monster Survivors - Ultimatives Überlebensspiel",
+                subtitle: "Erlebe die Ultimative Überlebensherausforderung!",
+                intro: "Willkommen bei Monster Survivors, wo Strategie auf Action trifft! Tauche ein in ein episches Überlebensabenteuer, in dem du Wellen von Monstern trotzen, Ressourcen sammeln und dich als ultimativer Überlebender beweisen musst.",
+                about: "Über Monster Survivors",
+                "about-text": "Monster Survivors ist ein fesselndes Online-Überlebensspiel, das deine Reflexe und strategisches Denken herausfordert. Du musst Wellen von Monstern abwehren, Ressourcen sammeln und so lange wie möglich überleben. Mit intuitiver Steuerung und fesselndem Gameplay ist es perfekt für Spieler jeden Alters!",
+                features: "Spielmerkmale:",
+                feature1: "Actiongeladene Überlebensgameplay",
+                feature2: "Herausfordernde Monsterwellen",
+                feature3: "Mehrere Waffen und Power-ups",
+                feature4: "Beeindruckende 3D-Grafiken und Animationen",
+                feature5: "Spielbar auf Desktop und mobilen Geräten",
+                "play-now": "Jetzt Spielen",
+                "error-message": "Spiel konnte nicht geladen werden. Bitte aktualisiere die Seite oder überprüfe deine Internetverbindung.",
+                "controls": "Spielsteuerung:\nWASD / Pfeiltasten: Bewegen\nMaus: Zielen und Schießen\nLeertaste: Spezialfähigkeit\nE: Interagieren",
+                "tutorial-title": "Wie man Monster Survivors Spielt",
+                "tutorial-basic": "Grundsteuerung",
+                "tutorial-basic-text": "Benutze WASD oder Pfeiltasten, um deinen Charakter zu bewegen. Maus zum Zielen und Schießen. Leertaste für Spezialfähigkeiten und E zum Interagieren.",
+                "tutorial-objective": "Spielziel",
+                "tutorial-objective-text": "Überlebe Wellen von Monstern, während du Ressourcen und Power-ups sammelst. Je länger du überlebst, desto mehr Punkte sammelst du!",
+                "tutorial-tips": "Pro-Tipps",
+                "tutorial-tip1": "Bleibe immer in Bewegung, um Monsterangriffen auszuweichen",
+                "tutorial-tip2": "Sammle Power-ups wann immer möglich",
+                "tutorial-tip3": "Setze Spezialfähigkeiten strategisch ein",
+                "tutorial-tip4": "Achte auf Boss-Monster",
+                "leaderboard-title": "Top Spieler",
+                "save-progress": "Fortschritt Speichern",
+                "progress-saved": "Fortschritt erfolgreich gespeichert!",
+                "mobile-controls": "Mobile Steuerung",
+                "controls-title": "Spielsteuerung",
+                "control-up": "Bewegen",
+                "control-left": "Links bewegen",
+                "control-down": "Omlaag bewegen",
+                "control-right": "Rechts bewegen",
+                "control-shoot": "Schießen",
+                "control-special": "Spezialfähigkeit",
+                "game-tip": "Tipp: Power-ups sammeln, um deine spezielle Fähigkeit zu verbessern!"
+            },
+            pt: {
+                title: "Monster Survivors - Jogo de Sobrevivência Definitivo",
+                subtitle: "Experimente o Desafio de Sobrevivência Definitivo!",
+                intro: "Bem-vindo ao Monster Survivors, onde estratégia encontra ação! Mergulhe em uma épica aventura de sobrevivência onde você enfrentará ondas de monstros, coletará recursos e provará seu valor como o sobrevivente definitivo.",
+                about: "Sobre Monster Survivors",
+                "about-text": "Monster Survivors é um emocionante jogo de sobrevivência online que desafia seus reflexos e pensamento estratégico. Você deve se defender de ondas de monstros, coletar recursos e sobreviver o máximo possível. Com controles intuitivos e jogabilidade envolvente, é perfeito para jogadores de todas as idades!",
+                features: "Recursos do Jogo:",
+                feature1: "Jogabilidade de sobrevivência cheia de ação",
+                feature2: "Ondas desafiadoras de monstros",
+                feature3: "Múltiplas armas e power-ups",
+                feature4: "Impressionantes gráficos e animações 3D",
+                feature5: "Jogável em desktop e dispositivos móveis",
+                "play-now": "Jogar Agora",
+                "error-message": "Falha ao carregar o jogo. Por favor, tente atualizar a página ou verifique sua conexão com a internet.",
+                "controls": "Controles do Jogo:\nWASD / Setas: Mover\nMouse: Mirar e Atirar\nEspaço: Habilidade Especial\nE: Interagir",
+                "tutorial-title": "Como Jogar Monster Survivors",
+                "tutorial-basic": "Controles Básicos",
+                "tutorial-basic-text": "Use WASD ou setas para mover seu personagem. Mouse para mirar e atirar. Espaço para habilidades especiais, e E para interagir.",
+                "tutorial-objective": "Objetivo do Jogo",
+                "tutorial-objective-text": "Sobreviva a ondas de monstros enquanto coleta recursos e power-ups. Quanto mais tempo você sobreviver, mais pontos ganhará!",
+                "tutorial-tips": "Dicas Pro",
+                "tutorial-tip1": "Mantenha-se sempre em movimento para evitar ataques de monstros",
+                "tutorial-tip2": "Colete power-ups sempre que possível",
+                "tutorial-tip3": "Use habilidades especiais estrategicamente",
+                "tutorial-tip4": "Cuidado com monstros chefes",
+                "leaderboard-title": "Melhores Jogadores",
+                "save-progress": "Salvar Progresso",
+                "progress-saved": "Progresso salvo com sucesso!",
+                "mobile-controls": "Controles Móveis",
+                "controls-title": "Controles do Jogo",
+                "control-up": "Mover",
+                "control-left": "Mover para a esquerda",
+                "control-down": "Mover para baixo",
+                "control-right": "Mover para a direita",
+                "control-shoot": "Atirar",
+                "control-special": "Habilidade Especial",
+                "game-tip": "Dica: Colete power-ups para melhorar sua habilidade especial!"
+            },
+            ar: {
+                title: "منتصر الوحوش - لعبة البقاء النهائية",
+                subtitle: "اختبر تحدي البقاء النهائي!",
+                intro: "مرحباً بك في منتصر الوحوش، حيث تلتقي الاستراتيجية بالحركة! انغمس في مغامرة بقاء ملحمية حيث ستواجه موجات من الوحوش، تجمع الموارد، وتثبت جدارتك كمنتصر نهائي.",
+                about: "حول منتصر الوحوش",
+                "about-text": "منتصر الوحوش هي لعبة بقاء مثيرة عبر الإنترنت تتحدى ردود أفعالك وتفكيرك الاستراتيجي. يجب عليك الدفاع ضد موجات من الوحوش، جمع الموارد، والبقاء على قيد الحياة لأطول فترة ممكنة. مع تحكم بديهي ولعب جذاب، إنها مثالية للاعبين من جميع الأعمار!",
+                features: "مميزات اللعبة:",
+                feature1: "لعب بقاء مليء بالحركة",
+                feature2: "موجات صعبة من الوحوش",
+                feature3: "أسلحة متعددة وتعزيزات القوة",
+                feature4: "رسومات وحركات ثلاثية الأبعاد مذهلة",
+                feature5: "قابلة للعب على سطح المكتب والأجهزة المحمولة",
+                "play-now": "العب الآن",
+                "error-message": "فشل في تحميل اللعبة. يرجى تحديث الصفحة أو التحقق من اتصال الإنترنت الخاص بك.",
+                "controls": "تحكم اللعبة:\nWASD / الأسهم: التحرك\nالماوس: التصويب والتصويب\nالمسافة: القدرة الخاصة\nE: التفاعل",
+                "tutorial-title": "كيف تلعب منتصر الوحوش",
+                "tutorial-basic": "التحكم الأساسي",
+                "tutorial-basic-text": "استخدم WASD أو الأسهم لتحريك شخصيتك. الماوس للتصويب والتصويب. المسافة للقدرات الخاصة، و E للتفاعل.",
+                "tutorial-objective": "هدف اللعبة",
+                "tutorial-objective-text": "ابق على قيد الحياة ضد موجات من الوحوش أثناء جمع الموارد وتعزيزات القوة. كلما طالت مدة بقائك، زادت النقاط التي تجمعها!",
+                "tutorial-tips": "نصائح احترافية",
+                "tutorial-tip1": "ابق متحركاً دائماً لتجنب هجمات الوحوش",
+                "tutorial-tip2": "اجمع تعزيزات القوة كلما أمكن",
+                "tutorial-tip3": "استخدم القدرات الخاصة بشكل استراتيجي",
+                "tutorial-tip4": "احترس من وحوش الزعيم",
+                "leaderboard-title": "أفضل اللاعبين",
+                "save-progress": "حفظ التقدم",
+                "progress-saved": "تم حفظ التقدم بنجاح!",
+                "mobile-controls": "تحكم الجوال",
+                "controls-title": "تحكم اللعبة",
+                "control-up": "التحرك",
+                "control-left": "التحرك إلى اليسار",
+                "control-down": "التحرك إلى الأسفل",
+                "control-right": "التحرك إلى اليمين",
+                "control-shoot": "التصويب",
+                "control-special": "القدرة الخاصة",
+                "game-tip": "ملاحظة: جمع power-ups لتحسين تأثير القدرة الخاصة!"
+            },
+            hi: {
+                title: "मॉन्स्टर सर्वाइवर्स - अल्टीमेट सर्वाइवल गेम",
+                subtitle: "अल्टीमेट सर्वाइवल चैलेंज का अनुभव करें!",
+                intro: "मॉन्स्टर सर्वाइवर्स में आपका स्वागत है, जहां रणनीति और एक्शन मिलते हैं! एक महाकाव्य सर्वाइवल एडवेंचर में डुबकी लगाएं जहां आप राक्षसों की लहरों का सामना करेंगे, संसाधन जमा करेंगे, और अल्टीमेट सर्वाइवर के रूप में अपनी योग्यता साबित करेंगे।",
+                about: "मॉन्स्टर सर्वाइवर्स के बारे में",
+                "about-text": "मॉन्स्टर सर्वाइवर्स एक रोमांचक ऑनलाइन सर्वाइवल गेम है जो आपकी प्रतिक्रियाओं और रणनीतिक सोच को चुनौती देता है। आपको राक्षसों की लहरों से बचाव करना होगा, संसाधन जमा करने होंगे, और जितना संभव हो सके जीवित रहना होगा। सहज नियंत्रण और आकर्षक गेमप्ले के साथ, यह सभी उम्र के खिलाड़ियों के लिए एकदम सही है!",
+                features: "गेम की विशेषताएं:",
+                feature1: "एक्शन से भरपूर सर्वाइवल गेमप्ले",
+                feature2: "चुनौतीपूर्ण राक्षस लहरें",
+                feature3: "कई हथियार और पावर-अप",
+                feature4: "शानदार 3D ग्राफिक्स और एनिमेशन",
+                feature5: "डेस्कटॉप और मोबाइल डिवाइस पर खेलने योग्य",
+                "play-now": "अभी खेलें",
+                "error-message": "गेम लोड करने में विफल। कृपया पेज रीफ्रेश करें या अपना इंटरनेट कनेक्शन जांचें।",
+                "controls": "गेम नियंत्रण:\nWASD / एरो कीज़: चलें\nमाउस: निशाना लगाएं और शूट करें\nस्पेस: विशेष क्षमता\nE: इंटरैक्ट करें",
+                "tutorial-title": "मॉन्स्टर सर्वाइवर्स कैसे खेलें",
+                "tutorial-basic": "बुनियादी नियंत्रण",
+                "tutorial-basic-text": "अपने किरदार को चलाने के लिए WASD या एरो कीज़ का उपयोग करें। निशाना लगाने और शूट करने के लिए माउस। विशेष क्षमताओं के लिए स्पेस, और इंटरैक्ट करने के लिए E।",
+                "tutorial-objective": "गेम का उद्देश्य",
+                "tutorial-objective-text": "संसाधन और पावर-अप जमा करते हुए राक्षसों की लहरों से बचें। जितना लंबा आप जीवित रहेंगे, उतने अधिक अंक प्राप्त करेंगे!",
+                "tutorial-tips": "प्रो टिप्स",
+                "tutorial-tip1": "राक्षसों के हमलों से बचने के लिए हमेशा गतिशील रहें",
+                "tutorial-tip2": "जब भी संभव हो पावर-अप जमा करें",
+                "tutorial-tip3": "विशेष क्षमताओं का रणनीतिक रूप से उपयोग करें",
+                "tutorial-tip4": "बॉस राक्षसों से सावधान रहें",
+                "leaderboard-title": "टॉप खिलाड़ी",
+                "save-progress": "प्रगति सहेजें",
+                "progress-saved": "प्रगति सफलतापूर्वक सहेजी गई!",
+                "mobile-controls": "मोबाइल नियंत्रण",
+                "controls-title": "गेम नियंत्रण",
+                "control-up": "चलना",
+                "control-left": "बाई ओर चलना",
+                "control-down": "नीचे चलना",
+                "control-right": "दाई ओर चलना",
+                "control-shoot": "शूट करना",
+                "control-special": "विशेष क्षमता",
+                "game-tip": "सुझाव: power-ups जमा करने से आपकी विशेष क्षमता को बेहतर बनाने में मदद मिलेगी!"
+            },
+            ru: {
+                title: "Выжившие Монстры - Игра на Выживание",
+                subtitle: "Испытайте Предельный Вызов на Выживание!",
+                intro: "Добро пожаловать в Выжившие Монстры, где стратегия встречается с действием! Погрузитесь в эпическое приключение на выживание, где вы столкнетесь с волнами монстров, соберете ресурсы и докажете свою ценность как предельного выжившего.",
+                about: "О Выживших Монстрах",
+                "about-text": "Выжившие Монстры - это захватывающая онлайн-игра на выживание, которая бросает вызов вашим рефлексам и стратегическому мышлению. Вы должны отбиваться от волн монстров, собирать ресурсы и выживать как можно дольше. С интуитивным управлением и увлекательным геймплеем, это идеально подходит для игроков всех возрастов!",
+                features: "Особенности игры:",
+                feature1: "Насыщенный действием геймплей на выживание",
+                feature2: "Сложные волны монстров",
+                feature3: "Множество оружия и усилений",
+                feature4: "Потрясающая 3D графика и анимация",
+                feature5: "Играть можно на десктопе и мобильных устройствах",
+                "play-now": "Играть Сейчас",
+                "error-message": "Не удалось загрузить игру. Пожалуйста, обновите страницу или проверьте подключение к интернету.",
+                "controls": "Управление игрой:\nWASD / Стрелки: Движение\nМышь: Прицеливание и стрельба\nПробел: Особая способность\nE: Взаимодействие",
+                "tutorial-title": "Как Играть в Выжившие Монстры",
+                "tutorial-basic": "Базовое управление",
+                "tutorial-basic-text": "Используйте WASD или стрелки для движения персонажа. Мышь для прицеливания и стрельбы. Пробел для особых способностей, и E для взаимодействия.",
+                "tutorial-objective": "Цель игры",
+                "tutorial-objective-text": "Выживайте в волнах монстров, собирая ресурсы и усиления. Чем дольше вы выживаете, тем больше очков получаете!",
+                "tutorial-tips": "Про советы",
+                "tutorial-tip1": "Всегда двигайтесь, чтобы избежать атак монстров",
+                "tutorial-tip2": "Собирайте усиления когда возможно",
+                "tutorial-tip3": "Стратегически используйте особые способности",
+                "tutorial-tip4": "Остерегайтесь боссов-монстров",
+                "leaderboard-title": "Лучшие Игроки",
+                "save-progress": "Сохранить Прогресс",
+                "progress-saved": "Прогресс успешно сохранен!",
+                "mobile-controls": "Мобильное управление",
+                "controls-title": "Управление игрой",
+                "control-up": "Движение",
+                "control-left": "Движение влево",
+                "control-down": "Движение вниз",
+                "control-right": "Движение вправо",
+                "control-shoot": "Выстрел",
+                "control-special": "Особая способность",
+                "game-tip": "Совет: Собирайте power-ups для улучшения вашей особой способности!"
+            },
+            ja: {
+                title: "モンスターサバイバーズ - 究極のサバイバルゲーム",
+                subtitle: "究極のサバイバルチャレンジを体験しよう！",
+                intro: "モンスターサバイバーズへようこそ！戦略とアクションが融合した世界へ。モンスターの波に立ち向かい、リソースを集め、究極のサバイバーとしての価値を証明する壮大なサバイバルアドベンチャーに挑戦しましょう。",
+                about: "モンスターサバイバーズについて",
+                "about-text": "モンスターサバイバーズは、あなたの反射神経と戦略的思考に挑戦する刺激的なオンラインサバイバルゲームです。モンスターの波を撃退し、リソースを集め、できるだけ長く生き残らなければなりません。直感的な操作と魅力的なゲームプレイで、すべての年齢層のプレイヤーに最適です！",
+                features: "ゲームの特徴：",
+                feature1: "アクション満載のサバイバルゲームプレイ",
+                feature2: "挑戦的なモンスターウェーブ",
+                feature3: "多彩な武器とパワーアップ",
+                feature4: "見事な3Dグラフィックスとアニメーション",
+                feature5: "デスクトップとモバイルデバイスでプレイ可能",
+                "play-now": "今すぐプレイ",
+                "error-message": "ゲームの読み込みに失敗しました。ページを更新するか、インターネット接続を確認してください。",
+                "controls": "ゲーム操作：\nWASD / 矢印キー：移動\nマウス：照準と射撃\nスペース：特殊能力\nE：操作",
+                "tutorial-title": "モンスターサバイバーズの遊び方",
+                "tutorial-basic": "基本操作",
+                "tutorial-basic-text": "キャラクターの移動にはWASDまたは矢印キーを使用。照準と射撃にはマウス。特殊能力にはスペース、操作にはEキーを使用します。",
+                "tutorial-objective": "ゲームの目的",
+                "tutorial-objective-text": "リソースとパワーアップを集めながらモンスターの波を生き残りましょう。生き残る時間が長いほど、より多くのポイントを獲得できます！",
+                "tutorial-tips": "プロのヒント",
+                "tutorial-tip1": "モンスターの攻撃を避けるため常に動き続けましょう",
+                "tutorial-tip2": "可能な限りパワーアップを集めましょう",
+                "tutorial-tip3": "特殊能力を戦略的に使用しましょう",
+                "tutorial-tip4": "ボスモンスターに注意しましょう",
+                "leaderboard-title": "トッププレイヤー",
+                "save-progress": "進捗を保存",
+                "progress-saved": "進捗を保存しました！",
+                "mobile-controls": "モバイル操作",
+                "controls-title": "ゲーム操作",
+                "control-up": "移動",
+                "control-left": "左に移動",
+                "control-down": "下に移動",
+                "control-right": "右に移動",
+                "control-shoot": "射撃",
+                "control-special": "特殊能力",
+                "game-tip": "ヒント：power-upsを集めて特殊能力を強化しよう！"
+            },
+            ko: {
+                title: "몬스터 서바이버스 - 궁극의 생존 게임",
+                subtitle: "궁극의 생존 도전을 경험하세요!",
+                intro: "몬스터 서바이버스에 오신 것을 환영합니다! 전략과 액션이 만나는 곳에서, 몬스터의 물결을 맞서고 자원을 수집하며 궁극의 생존자로서의 가치를 증명하는 서사시적인 생존 모험에 뛰어드세요.",
+                about: "몬스터 서바이버스 소개",
+                "about-text": "몬스터 서바이버스는 당신의 반사 신경과 전략적 사고에 도전하는 흥미진진한 온라인 생존 게임입니다. 몬스터의 물결을 막아내고, 자원을 수집하며, 가능한 한 오래 생존해야 합니다. 직관적인 조작과 매력적인 게임플레이로 모든 연령대의 플레이어에게 완벽합니다!",
+                features: "게임 특징:",
+                feature1: "액션으로 가득한 생존 게임플레이",
+                feature2: "도전적인 몬스터 물결",
+                feature3: "다양한 무기와 파워업",
+                feature4: "멋진 3D 그래픽과 애니메이션",
+                feature5: "데스크톱과 모바일 기기에서 플레이 가능",
+                "play-now": "지금 플레이",
+                "error-message": "게임 로딩 실패. 페이지를 새로고침하거나 인터넷 연결을 확인해주세요.",
+                "controls": "게임 조작:\nWASD / 방향키: 이동\n마우스: 조준 및 발사\n스페이스바: 특수 능력\nE: 상호작용",
+                "tutorial-title": "몬스터 서바이버스 플레이 방법",
+                "tutorial-basic": "기본 조작",
+                "tutorial-basic-text": "캐릭터 이동에는 WASD 또는 방향키를 사용하세요. 조준과 발사에는 마우스를, 특수 능력에는 스페이스바를, 상호작용에는 E키를 사용합니다.",
+                "tutorial-objective": "게임 목표",
+                "tutorial-objective-text": "자원과 파워업을 수집하면서 몬스터의 물결을 생존하세요. 생존 시간이 길수록 더 많은 점수를 획득합니다!",
+                "tutorial-tips": "프로 팁",
+                "tutorial-tip1": "몬스터의 공격을 피하기 위해 항상 움직이세요",
+                "tutorial-tip2": "가능한 한 파워업을 수집하세요",
+                "tutorial-tip3": "특수 능력을 전략적으로 사용하세요",
+                "tutorial-tip4": "보스 몬스터를 조심하세요",
+                "leaderboard-title": "상위 플레이어",
+                "save-progress": "진행 상황 저장",
+                "progress-saved": "진행 상황이 저장되었습니다!",
+                "mobile-controls": "모바일 조작",
+                "controls-title": "게임 조작",
+                "control-up": "이동",
+                "control-left": "왼쪽으로 이동",
+                "control-down": "아래로 이동",
+                "control-right": "오른쪽으로 이동",
+                "control-shoot": "발사",
+                "control-special": "특수 능력",
+                "game-tip": "주의: power-ups를 수집하여 특수 능력을 강화하세요!"
+            },
+            fr: {
+                title: "Monster Survivors - Le Jeu de Survie Ultime",
+                subtitle: "Vivez le Défi de Survie Ultime !",
+                intro: "Bienvenue dans Monster Survivors, où la stratégie rencontre l'action ! Plongez dans une aventure de survie épique où vous affronterez des vagues de monstres, collecterez des ressources et prouverez votre valeur en tant que survivant ultime.",
+                about: "À Propos de Monster Survivors",
+                "about-text": "Monster Survivors est un jeu de survie en ligne palpitant qui défie vos réflexes et votre pensée stratégique. Vous devez repousser des vagues de monstres, collecter des ressources et survivre le plus longtemps possible. Avec des contrôles intuitifs et un gameplay engageant, c'est parfait pour les joueurs de tous âges !",
+                features: "Caractéristiques du Jeu :",
+                feature1: "Gameplay de survie riche en action",
+                feature2: "Vagues de monstres stimulantes",
+                feature3: "Armes multiples et power-ups",
+                feature4: "Graphismes et animations 3D époustouflants",
+                feature5: "Jouable sur ordinateur et appareils mobiles",
+                "play-now": "Jouer Maintenant",
+                "error-message": "Échec du chargement du jeu. Veuillez rafraîchir la page ou vérifier votre connexion Internet.",
+                "controls": "Contrôles du Jeu :\nWASD / Flèches : Se déplacer\nSouris : Viser et tirer\nEspace : Capacité spéciale\nE : Interagir",
+                "tutorial-title": "Comment Jouer à Monster Survivors",
+                "tutorial-basic": "Contrôles de Base",
+                "tutorial-basic-text": "Utilisez WASD ou les flèches pour déplacer votre personnage. Souris pour viser et tirer. Espace pour les capacités spéciales, et E pour interagir.",
+                "tutorial-objective": "Objectif du Jeu",
+                "tutorial-objective-text": "Survivez aux vagues de monstres tout en collectant des ressources et des power-ups. Plus vous survivez longtemps, plus vous gagnez de points !",
+                "tutorial-tips": "Conseils Pro",
+                "tutorial-tip1": "Restez toujours en mouvement pour éviter les attaques",
+                "tutorial-tip2": "Collectez des power-ups quand c'est possible",
+                "tutorial-tip3": "Utilisez les capacités spéciales stratégiquement",
+                "tutorial-tip4": "Méfiez-vous des monstres boss",
+                "leaderboard-title": "Meilleurs Joueurs",
+                "save-progress": "Sauvegarder la Progression",
+                "progress-saved": "Progression sauvegardée avec succès !",
+                "mobile-controls": "Contrôles Mobiles",
+                "controls-title": "Contrôles du Jeu",
+                "control-up": "Déplacer",
+                "control-left": "Déplacer à gauche",
+                "control-down": "Déplacer en bas",
+                "control-right": "Déplacer à droite",
+                "control-shoot": "Tirer",
+                "control-special": "Capacité spéciale",
+                "game-tip": "Conseil : Collectez des power-ups pour améliorer votre capacité spéciale !"
+            },
+            it: {
+                title: "Monster Survivors - Il Gioco di Sopravvivenza Definitivo",
+                subtitle: "Sperimenta la Sfida di Sopravvivenza Definitiva!",
+                intro: "Benvenuto in Monster Survivors, dove la strategia incontra l'azione! Tuffati in un'avventura di sopravvivenza epica dove affronterai ondate di mostri, raccoglierai risorse e dimostrerai il tuo valore come sopravvissuto definitivo.",
+                about: "Su Monster Survivors",
+                "about-text": "Monster Survivors è un emozionante gioco di sopravvivenza online che mette alla prova i tuoi riflessi e il tuo pensiero strategico. Devi respingere ondate di mostri, raccogliere risorse e sopravvivere il più a lungo possibile. Con controlli intuitivi e un gameplay coinvolgente, è perfetto per i giocatori di tutte le età!",
+                features: "Caratteristiche del Gioco:",
+                feature1: "Gameplay di sopravvivenza ricco di azione",
+                feature2: "Ondate di mostri impegnative",
+                feature3: "Armi multiple e power-up",
+                feature4: "Grafica e animazioni 3D mozzafiato",
+                feature5: "Giocabile su desktop e dispositivi mobili",
+                "play-now": "Gioca Ora",
+                "error-message": "Impossibile caricare il gioco. Aggiorna la pagina o controlla la tua connessione Internet.",
+                "controls": "Controlli del Gioco:\nWASD / Frecce: Muoviti\nMouse: Mira e spara\nSpazio: Abilità speciale\nE: Interagisci",
+                "tutorial-title": "Come Giocare a Monster Survivors",
+                "tutorial-basic": "Controlli Base",
+                "tutorial-basic-text": "Usa WASD o le frecce per muovere il tuo personaggio. Mouse per mirare e sparare. Spazio per le abilità speciali, e E per interagire.",
+                "tutorial-objective": "Obiettivo del Gioco",
+                "tutorial-objective-text": "Sopravvivi alle ondate di mostri mentre raccogli risorse e power-up. Più a lungo sopravvivi, più punti guadagni!",
+                "tutorial-tips": "Suggerimenti Pro",
+                "tutorial-tip1": "Resta sempre in movimento per evitare gli attacchi",
+                "tutorial-tip2": "Raccogli power-up quando possibile",
+                "tutorial-tip3": "Usa le abilità speciali strategicamente",
+                "tutorial-tip4": "Attento ai mostri boss",
+                "leaderboard-title": "Migliori Giocatori",
+                "save-progress": "Salva Progresso",
+                "progress-saved": "Progresso salvato con successo!",
+                "mobile-controls": "Controlli Mobili",
+                "controls-title": "Controlli del Gioco",
+                "control-up": "Muovi",
+                "control-left": "Muovi a sinistra",
+                "control-down": "Muovi in basso",
+                "control-right": "Muovi a destra",
+                "control-shoot": "Spara",
+                "control-special": "Abilità speciale",
+                "game-tip": "Suggerimento : Raccogli power-ups per migliorare la tua abilità speciale!"
             }
             // Add more languages here...
         };
 
         function updateLanguage(lang) {
+            // Update all elements with data-i18n attribute
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) {
-                    element.textContent = translations[lang][key];
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.value = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
                 }
+            });
+            
+            // Update HTML lang attribute and text direction
+            document.documentElement.lang = lang;
+            if (lang === 'ar') {
+                document.documentElement.dir = 'rtl';
+            } else {
+                document.documentElement.dir = 'ltr';
+            }
+
+            // Update meta description and title
+            const metaDescription = document.querySelector('meta[name="description"]');
+            const title = document.querySelector('title');
+            if (translations[lang]) {
+                if (metaDescription) {
+                    metaDescription.content = translations[lang]['about-text'] || metaDescription.content;
+                }
+                if (title) {
+                    title.textContent = translations[lang].title || title.textContent;
+                }
+            }
+        }
+
+        // Add language change event listener with error handling
+        document.getElementById('languageSelector').addEventListener('change', (e) => {
+            try {
+                const selectedLang = e.target.value;
+                if (translations[selectedLang]) {
+                    updateLanguage(selectedLang);
+                    localStorage.setItem('preferred-language', selectedLang);
+                } else {
+                    console.error(`Translation not found for language: ${selectedLang}`);
+                }
+            } catch (error) {
+                console.error('Error updating language:', error);
+            }
+        });
+
+        // Set initial language with error handling
+        try {
+            const preferredLanguage = localStorage.getItem('preferred-language') || 
+                                     navigator.language.split('-')[0] || 
+                                     'en';
+            
+            if (translations[preferredLanguage]) {
+                document.getElementById('languageSelector').value = preferredLanguage;
+                updateLanguage(preferredLanguage);
+            } else {
+                // Fallback to English if preferred language is not supported
+                document.getElementById('languageSelector').value = 'en';
+                updateLanguage('en');
+            }
+        } catch (error) {
+            console.error('Error setting initial language:', error);
+            // Fallback to English
+            document.getElementById('languageSelector').value = 'en';
+            updateLanguage('en');
+        }
+
+        // Game loading and error handling
+        const gameIframe = document.querySelector('.game-iframe');
+        const loadingSpinner = document.querySelector('.loading-spinner');
+        const errorMessage = document.querySelector('.error-message');
+        const controlsInfo = document.querySelector('.controls-info');
+
+        gameIframe.addEventListener('load', () => {
+            loadingSpinner.style.display = 'none';
+            errorMessage.style.display = 'none';
+            controlsInfo.classList.add('show');
+        });
+
+        gameIframe.addEventListener('error', () => {
+            loadingSpinner.style.display = 'none';
+            errorMessage.style.display = 'block';
+        });
+
+        // Show controls info on hover
+        gameIframe.addEventListener('mouseenter', () => {
+            controlsInfo.classList.add('show');
+        });
+
+        gameIframe.addEventListener('mouseleave', () => {
+            controlsInfo.classList.remove('show');
+        });
+
+        // Tutorial Modal
+        const tutorialBtn = document.getElementById('tutorialBtn');
+        const tutorialModal = document.getElementById('tutorialModal');
+        const closeTutorial = document.getElementById('closeTutorial');
+
+        tutorialBtn.addEventListener('click', () => {
+            tutorialModal.style.display = 'flex';
+        });
+
+        closeTutorial.addEventListener('click', () => {
+            tutorialModal.style.display = 'none';
+        });
+
+        // Mock Leaderboard Data
+        const leaderboard = [
+            { name: "ProGamer", score: 12500 },
+            { name: "Survivor", score: 9800 },
+            { name: "MonsterSlayer", score: 8500 },
+            { name: "NewPlayer", score: 7200 },
+            { name: "Rookie", score: 5000 },
+            { name: "Player6", score: 4800 },
+            { name: "Player7", score: 4500 },
+            { name: "Player8", score: 4200 },
+            { name: "Player9", score: 4000 },
+            { name: "Player10", score: 3800 }
+        ];
+
+        // 更新排行榜显示
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = '';
+            
+            // 获取前10名玩家
+            const topPlayers = leaderboard.slice(0, 10);
+            
+            topPlayers.forEach((player, index) => {
+                const li = document.createElement('li');
+                li.className = 'leaderboard-item flex justify-between items-center p-2 hover:bg-gray-100 rounded';
+                
+                // 为前三名添加特殊样式
+                if (index < 3) {
+                    const rankClass = `rank-${index + 1}`;
+                    const rankEmoji = index === 0 ? '👑' : index === 1 ? '🥈' : '🥉';
+                    const scoreClass = index === 0 ? 'score-gold' : index === 1 ? 'score-silver' : 'score-bronze';
+                    
+                    li.innerHTML = `
+                        <span class="top-player ${rankClass}">${rankEmoji} ${player.name}</span>
+                        <span class="${scoreClass}">${player.score.toLocaleString()}</span>
+                    `;
+                    
+                    // 添加特殊背景
+                    li.style.background = index === 0 ? 'rgba(255, 215, 0, 0.1)' : 
+                                        index === 1 ? 'rgba(192, 192, 192, 0.1)' : 
+                                        'rgba(205, 127, 50, 0.1)';
+                } else {
+                    li.innerHTML = `
+                        <span class="text-gray-800 font-medium">${index + 1}. ${player.name}</span>
+                        <span class="text-gray-700">${player.score.toLocaleString()}</span>
+                    `;
+                }
+                
+                leaderboardList.appendChild(li);
             });
         }
 
-        document.getElementById('languageSelector').addEventListener('change', (e) => {
-            updateLanguage(e.target.value);
-            localStorage.setItem('preferred-language', e.target.value);
+        // 初始化排行榜
+        updateLeaderboard();
+
+        // Share Functions
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("Check out Monster Survivors - The Ultimate Survival Game!");
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+        }
+
+        function shareOnWhatsApp() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("Check out Monster Survivors - The Ultimate Survival Game!");
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+        }
+
+        // Save Progress Functionality
+        const saveProgressBtn = document.getElementById('saveProgressBtn');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        saveProgressBtn.addEventListener('click', () => {
+            // Mock saving progress
+            const gameState = {
+                level: 5,
+                score: 10000,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('monsterSurvivorsProgress', JSON.stringify(gameState));
+            showToast('Progress saved successfully!');
         });
 
-        // Set initial language
-        const preferredLanguage = localStorage.getItem('preferred-language') || 
-                                 navigator.language.split('-')[0] || 
-                                 'en';
-        document.getElementById('languageSelector').value = preferredLanguage;
-        updateLanguage(preferredLanguage);
+        // Mobile Controls
+        const mobileControls = document.getElementById('mobileControls');
+
+        // Show mobile controls on mobile devices
+        if (window.innerWidth <= 768) {
+            mobileControls.classList.remove('hidden');
+        }
+
+        // Handle mobile control buttons
+        document.querySelectorAll('.mobile-btn').forEach(btn => {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const action = btn.dataset.action;
+                // Send control event to game iframe
+                gameIframe.contentWindow.postMessage({
+                    type: 'mobileControl',
+                    action: action
+                }, '*');
+            });
+        });
+
+        // 显示游戏结束模态框
+        function showGameOver(score) {
+            const modal = document.getElementById('gameOverModal');
+            const finalScore = document.getElementById('finalScore');
+            const playerRank = document.getElementById('playerRank');
+            const nextRankInfo = document.getElementById('nextRankInfo');
+            const achievements = document.getElementById('achievements');
+            
+            // 更新分数
+            finalScore.textContent = score;
+            
+            // 计算玩家排名
+            const rank = leaderboard.findIndex(p => p.score < score) + 1;
+            playerRank.textContent = rank;
+            
+            // 计算距离下一个排名的分数差
+            if (rank > 1) {
+                const nextPlayer = leaderboard[rank - 2];
+                const scoreDiff = nextPlayer.score - score;
+                nextRankInfo.textContent = `距离第${rank-1}名还差 ${scoreDiff} 分！`;
+            }
+            
+            // 检查成就
+            const newAchievements = checkAchievements(score);
+            achievements.innerHTML = newAchievements.map(achievement => 
+                `<div class="achievement-badge">${achievement}</div>`
+            ).join('');
+            
+            // 显示模态框
+            modal.style.display = 'flex';
+            
+            // 添加重新开始按钮事件
+            modal.querySelector('button').onclick = () => {
+                modal.style.display = 'none';
+                startGame();
+            };
+        }
+
+        // 检查成就
+        function checkAchievements(score) {
+            const achievements = [];
+            
+            if (score >= 1000) achievements.push('新手玩家');
+            if (score >= 5000) achievements.push('熟练玩家');
+            if (score >= 10000) achievements.push('专业玩家');
+            if (score >= 50000) achievements.push('大师玩家');
+            if (score >= 100000) achievements.push('传奇玩家');
+            
+            return achievements;
+        }
+
+        // 修改游戏结束处理
+        function handleGameOver() {
+            const score = calculateFinalScore();
+            showGameOver(score);
+            updateLeaderboard();
+        }
     </script>
 </body>
 </html>
